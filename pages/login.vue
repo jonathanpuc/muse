@@ -10,12 +10,29 @@
 
 <script>
 import { spotifyClient, spotifyRedirect } from "~/helpers/config";
+import getParam from "~/helpers/params";
 export default {
   data() {
     return {
       spotifyClient,
       spotifyRedirect
     };
+  },
+  middleware: "checkAuth",
+  created: function() {
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push("/dashboard");
+    } else {
+      const token = getParam("access_token", this.$route.hash);
+      if (token) {
+        const tokenExpiry = getParam("expires_in", this.$route.hash);
+        this.$store.dispatch("saveToken", {
+          token,
+          tokenExpiry: new Date().getTime() + tokenExpiry * 1000
+        });
+        this.$router.push("/dashboard");
+      }
+    }
   }
 };
 </script>

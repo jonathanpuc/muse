@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  middleware: "checkAuth"
+  middleware: ["checkAuth", "auth"]
 };
 </script>

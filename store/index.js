@@ -8,7 +8,7 @@ const createStore = () => {
     mutations: {
       setToken(state, { token, tokenExpiry }) {
         state.token = token
-        state.tokenExpiry = new Date().getTime() + tokenExpiry
+        state.tokenExpiry = tokenExpiry
       },
       clearToken(state) {
         state.token = ''
@@ -18,14 +18,25 @@ const createStore = () => {
     actions: {
       saveToken({ commit }, { token, tokenExpiry }) {
         commit('setToken', { token, tokenExpiry })
+        localStorage.setItem('token', token)
+        localStorage.setItem('tokenExpiry', tokenExpiry)
       },
       clearCredentials({ commit }) {
         commit('clearToken')
+      },
+      initAuth({ commit }) {
+        const token = localStorage.getItem('token')
+        const tokenExpiry = localStorage.getItem('tokenExpiry')
+
+        if (new Date().getTime() > tokenExpiry || !token) {
+          return
+        }
+        commit('setToken', { token, tokenExpiry })
       }
     },
     getters: {
       isAuthenticated(state) {
-        return new Date().getTime() < state.tokenExpiry && state.token
+        return state.token
       }
     }
   })

@@ -1,6 +1,6 @@
-export default function({ store, redirect }) {
-  if (!store.getters.isAuthenticated) {
-    store.dispatch('clearCredentials')
-    redirect('/login')
+export default function({ store }) {
+  console.log('CHECK_AUTH')
+  if (process.client) {
+    store.dispatch('initAuth')
   }
 }

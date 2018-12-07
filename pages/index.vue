@@ -3,6 +3,9 @@
     <div>
       <logo/>
       <h1 class="title">muse</h1>
+      <button>
+        <nuxt-link to="login">LOGIN</nuxt-link>>
+      </button>
       <h2 class="subtitle">
         <nuxt-link to="/create">speak your story in 5 songs</nuxt-link>
       </h2>
@@ -17,25 +20,13 @@
 
 <script>
 import Logo from "~/components/Logo.vue";
-import getParam from "~/helpers/params";
-console.log(process.env);
+
 export default {
   components: {
     Logo
   },
-  created: function() {
-    const token = getParam("access_token", this.$route.hash);
-    if (token) {
-      const tokenExpiry = getParam("expires_in", this.$route.hash);
-      this.$store.dispatch("saveToken", {
-        token,
-        tokenExpiry: Number(tokenExpiry)
-      });
-    }
-  },
   methods: {
     async searchArtist() {
-      console.log(this.$store);
       try {
         const response = await this.$axios.get(
           "https://api.spotify.com/v1/search?q=Drake&type=artist",
