@@ -1,48 +1,17 @@
 <template>
   <section class="container">
     <div>
-      <logo/>
       <h1 class="title">muse</h1>
       <button>
         <nuxt-link to="login">LOGIN</nuxt-link>>
       </button>
-      <h2 class="subtitle">
-        <nuxt-link to="/create">speak your story in 5 songs</nuxt-link>
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
-        <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
-      </div>
-      <button @click="searchArtist">search</button>
+      <h2 class="subtitle">speak your story in 5 songs</h2>
     </div>
   </section>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-
-export default {
-  components: {
-    Logo
-  },
-  methods: {
-    async searchArtist() {
-      try {
-        const response = await this.$axios.get(
-          "https://api.spotify.com/v1/search?q=Drake&type=artist",
-          {
-            headers: {
-              Authorization: "Bearer " + this.$store.getters.isAuthenticated
-            }
-          }
-        );
-        console.log(response);
-      } catch (e) {
-        console.log(e.message);
-      }
-    }
-  }
-};
+export default {};
 </script>
 
 <style>

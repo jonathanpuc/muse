@@ -1,9 +1,19 @@
 <template>
-  <div>dashboard</div>
+  <div>
+    <h2>Hello {{ name }}</h2>
+    <button>
+      <nuxt-link to="create">Create</nuxt-link>
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      name: ""
+    };
+  },
   middleware: ["checkAuth", "auth"],
   created: async function() {
     try {
@@ -12,7 +22,8 @@ export default {
           Authorization: "Bearer " + this.$store.getters.isAuthenticated
         }
       });
-      console.log(response);
+
+      this.name = response.data.display_name;
     } catch (e) {
       console.log(e.message);
     }
