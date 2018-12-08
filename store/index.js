@@ -3,7 +3,14 @@ import Vuex from 'vuex'
 const createStore = () => {
   return new Vuex.Store({
     state: () => ({
-      token: ''
+      token: '',
+      tokenExpiry: null,
+      currentStack: {
+        tracks: [{ name: 'waddah' }, { name: 'yeah mayne' }]
+      },
+      editingStack: {
+        tracks: [{ name: 'waddah' }, { name: 'yeah mayne' }]
+      }
     }),
     mutations: {
       setToken(state, { token, tokenExpiry }) {
@@ -13,6 +20,11 @@ const createStore = () => {
       clearToken(state) {
         state.token = ''
         state.tokenExpiry = ''
+      },
+      clearStack(state, type) {
+        state[type] = {
+          tracks: []
+        }
       }
     },
     actions: {
@@ -32,11 +44,17 @@ const createStore = () => {
           return
         }
         commit('setToken', { token, tokenExpiry })
+      },
+      deleteStack({ commit }, { type }) {
+        commit('clearStack', type)
       }
     },
     getters: {
       isAuthenticated(state) {
         return state.token
+      },
+      getStackTracks(state) {
+        return type => state[type].tracks
       }
     }
   })

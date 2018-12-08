@@ -17,6 +17,7 @@ div {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 35px 0px;
 }
 img {
   width: 120px;

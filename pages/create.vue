@@ -1,19 +1,36 @@
 <template>
-  <div>
-    <nuxt-link to="/">create wassah</nuxt-link>>
-    <ArtistHeader v-if="artist.name" :name="artist.name" :image="artist.image"/>
-    <audio controls id="audio-player" :src="tracks.length ? tracks[0].preview_url : ''"/>
-    <TrackList :tracks="tracks" @trackPreviewSelection="handleTrackPreviewSelection"/>
-    <form @submit.prevent="searchArtist">
-      <input type="text" v-model="artistQuery">
-      <button type="submit">search</button>
-    </form>
+  <div class="container">
+    <div class="header">
+      <PageHeader title="Create"/>
+      <button @click="cancelCreation">Cancel</button>
+    </div>
+    <SearchBar @submit="searchArtist"/>
+    <div v-if="loading" class="loading-container">
+      <img src="~/assets/img/loader.gif" alt="loading">
+    </div>
+    <div v-else>
+      <ArtistHeader v-if="artist.name" :name="artist.name" :image="artist.image"/>
+      <audio
+        v-if="artist.name"
+        controls
+        id="audio-player"
+        :src="tracks.length ? tracks[0].preview_url : ''"
+      />
+      <TrackList :tracks="tracks" @trackPreviewSelection="handleTrackPreviewSelection"/>
+    </div>
+    <StackSongCount :count="stackTracks.length" @click="showModal = true"/>
+    <Modal v-if="showModal" @close="showModal = false">
+      <h3 slot="header">Stack so far...</h3>
+    </Modal>
   </div>
 </template>
 
 <script>
+import SearchBar from "~/components/SearchBar";
 import ArtistHeader from "~/components/ArtistHeader";
 import TrackList from "~/components/TrackList";
+import StackSongCount from "~/components/StackSongCount";
+import Modal from "~/components/Modal";
 export default {
   data() {
     return {
@@ -24,20 +41,25 @@ export default {
         name: "",
         image: ""
       },
-      artistQuery: ""
+      artistQuery: "",
+      loading: false,
+      showModal: false
     };
   },
   components: {
     ArtistHeader,
-    TrackList
+    TrackList,
+    SearchBar,
+    StackSongCount,
+    Modal
   },
   middleware: ["checkAuth", "auth"],
   methods: {
-    async searchArtist() {
-      console.log(this);
+    async searchArtist(query) {
+      this.loading = true;
       try {
         const artistResponse = await this.$axios.get(
-          `https://api.spotify.com/v1/search?q=${this.artistQuery}&type=artist`,
+          `https://api.spotify.com/v1/search?q=${query}&type=artist`,
           {
             headers: {
               Authorization: "Bearer " + this.$store.getters.isAuthenticated
@@ -67,6 +89,7 @@ export default {
 
         const { tracks } = topTracksResponse.data;
         this.tracks = tracks;
+        this.loading = false;
       } catch (e) {
         console.log(e.message);
       }
@@ -83,7 +106,49 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    cancelCreation() {
+      this.$store.dispatch("deleteStack", { type: "editingStack" });
+    }
+  },
+  computed: {
+    stackTracks() {
+      return this.$store.getters.getStackTracks("editingStack");
     }
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+}
+
+.loading-container {
+  text-align: center;
+  padding: 100px 0px;
+}
+
+audio {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+
+  @media only screen and (min-width: 800px) {
+    width: 600px;
+  }
+}
+</style>

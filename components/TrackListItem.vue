@@ -72,7 +72,7 @@ export default {
   left: 50%; /* position the left edge of the element at the middle of the parent */
   transform: translate(-50%, -50%);
   content: "";
-  background: url("~assets/play-button.png");
+  background: url("~assets/img/play-button.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
