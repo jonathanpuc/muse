@@ -16,7 +16,12 @@
         id="audio-player"
         :src="tracks.length ? tracks[0].preview_url : ''"
       />
-      <TrackList :tracks="tracks" @trackPreviewSelection="handleTrackPreviewSelection"/>
+      <TrackList
+        :tracks="tracks"
+        :stackTracks="stackTracks"
+        @trackPreviewSelection="handleTrackPreviewSelection"
+        @trackSelectionToggle="handleTrackToggle"
+      />
     </div>
     <StackSongCount :count="stackTracks.length" @click="showModal = true"/>
     <Modal v-if="showModal" @close="showModal = false">
@@ -109,6 +114,17 @@ export default {
     },
     cancelCreation() {
       this.$store.dispatch("deleteStack", { type: "editingStack" });
+    },
+    handleTrackToggle(trackId) {
+      if (this.stackTracks.find(track => track.id === trackId)) {
+        console.log("removing");
+        this.$store.dispatch("removeTrack", { type: "editingStack", trackId });
+      } else {
+        this.$store.dispatch("addTrack", {
+          type: "editingStack",
+          track: this.tracks.find(track => track.id === trackId)
+        });
+      }
     }
   },
   computed: {

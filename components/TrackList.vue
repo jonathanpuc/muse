@@ -3,11 +3,15 @@
     <TrackListItem
       v-for="track in tracks"
       :key="track.id"
-      :track="{name: track.name,
+      :track="{
+        id: track.id,
+        name: track.name,
         image: track.album.images[0].url,
         preview: track.preview_url
         }"
-      @trackSelect="handleTrackSelect"
+      @trackPreviewSelect="handleTrackSelect"
+      :isSelected="stackTracks.map(stackTrack => stackTrack.id).includes(track.id)"
+      @toggleTrack="handleTrackToggle"
     />
   </div>
 </template>
@@ -16,13 +20,17 @@
 <script>
 import TrackListItem from "~/components/TrackListItem";
 export default {
-  props: ["tracks"],
+  props: ["tracks", "stackTracks"],
   components: {
     TrackListItem
   },
   methods: {
-    handleTrackSelect(track) {
-      this.$emit("trackPreviewSelection", track);
+    handleTrackSelect(trackUrl) {
+      this.$emit("trackPreviewSelection", trackUrl);
+    },
+    handleTrackToggle(trackId) {
+      console.log(trackId);
+      this.$emit("trackSelectionToggle", trackId);
     }
   }
 };

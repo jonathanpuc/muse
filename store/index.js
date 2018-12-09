@@ -9,7 +9,7 @@ const createStore = () => {
         tracks: [{ name: 'waddah' }, { name: 'yeah mayne' }]
       },
       editingStack: {
-        tracks: [{ name: 'waddah' }, { name: 'yeah mayne' }]
+        tracks: []
       }
     }),
     mutations: {
@@ -25,6 +25,9 @@ const createStore = () => {
         state[type] = {
           tracks: []
         }
+      },
+      updateStackTrack(state, { type, stack }) {
+        state[type] = stack
       }
     },
     actions: {
@@ -47,6 +50,26 @@ const createStore = () => {
       },
       deleteStack({ commit }, { type }) {
         commit('clearStack', type)
+      },
+      removeTrack({ commit, state }, { type, trackId }) {
+        if (state[type].tracks.length > 0) {
+          const newStack = {
+            ...state[type],
+            tracks: state[type].tracks.filter(track => track.id !== trackId)
+          }
+          console.log('removing')
+          commit('updateStackTrack', { type, stack: newStack })
+        }
+      },
+      addTrack({ commit, state }, { type, track }) {
+        if (state[type].tracks.length < 6) {
+          const newStack = {
+            ...state[type],
+            tracks: [...state[type].tracks, track]
+          }
+          console.log('Commiting, New stack', newStack)
+          commit('updateStackTrack', { type, stack: newStack })
+        }
       }
     },
     getters: {

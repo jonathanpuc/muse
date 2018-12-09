@@ -1,11 +1,30 @@
 <template>
-  <div class="container">
-    <div
-      :class="{hovered: showingPlay}"
-      @mouseleave="hidePlayBtn"
-      @click="$emit('trackSelect', track.preview)"
-    >
-      <img class="album-art" :src="track.image" :alt="track.name" @mouseover="showPlayBtn">
+  <div class="track-list-item-container">
+    <div :class="{hovered: showingControls}" @mouseleave="hideControls">
+      <div class="heart-container" v-if="showingControls">
+        <img
+          v-if="isSelected"
+          @click="$emit('toggleTrack', track.id)"
+          src="~/assets/img/heart-gold.png"
+          alt="remove from stack"
+        >
+        <img
+          v-else
+          @click="$emit('toggleTrack', track.id)"
+          src="~/assets/img/heart-grey.png"
+          alt="add to stack"
+        >
+      </div>
+      <img
+        class="album-art"
+        :src="track.image"
+        :alt="track.name"
+        @mouseover="showControls"
+        @focus="showControls"
+      >
+      <div class="play-control" v-if="showingControls">
+        <img src="~/assets/img/play-button.png" alt="play preview" @click="selectTrackPreview">
+      </div>
     </div>
     <div class="name-container">
       <p>{{ track.name }}</p>
@@ -15,31 +34,28 @@
 
 <script>
 export default {
-  props: ["track"],
+  props: ["track", "isSelected"],
   data() {
     return {
-      showingPlay: false
+      showingControls: false
     };
   },
   methods: {
-    selectTrack() {
-      console.log(this);
-      console.log("sup");
-      this.$emit("trackSelect", this.track.preview);
+    selectTrackPreview() {
+      this.$emit("trackPreviewSelect", this.track.preview);
     },
-    showPlayBtn() {
-      console.log("yes");
-      this.showingPlay = true;
+    showControls() {
+      this.showingControls = true;
     },
-    hidePlayBtn() {
-      this.showingPlay = false;
+    hideControls() {
+      this.showingControls = false;
     }
   }
 };
 </script>
 
-<style scoped>
-.container {
+<style scoped lang="scss">
+.track-list-item-container {
   width: 150px;
   margin: 20px 10px;
 }
@@ -66,21 +82,26 @@ export default {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.hovered::after {
+.play-control {
   position: absolute;
   top: 50%; /* position the top  edge of the element at the middle of the parent */
   left: 50%; /* position the left edge of the element at the middle of the parent */
   transform: translate(-50%, -50%);
-  content: "";
-  background: url("~assets/img/play-button.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   cursor: pointer;
-  height: 50%;
-  width: 50%;
   display: flex;
   align-items: center;
+  img {
+    width: 60px;
+  }
+}
+
+.heart-container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  img {
+    width: 25px;
+  }
 }
 </style>
 
