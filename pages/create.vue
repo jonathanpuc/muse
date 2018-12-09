@@ -26,6 +26,9 @@
     <StackSongCount :count="stackTracks.length" @click="showModal = true"/>
     <Modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Stack so far...</h3>
+      <div slot="body">
+        <StackTrackListItem v-for="track in stackTracks" :key="track.id" :track="track"/>
+      </div>
     </Modal>
   </div>
 </template>
@@ -36,6 +39,7 @@ import ArtistHeader from "~/components/ArtistHeader";
 import TrackList from "~/components/TrackList";
 import StackSongCount from "~/components/StackSongCount";
 import Modal from "~/components/Modal";
+import StackTrackListItem from "~/components/StackTrackListItem";
 export default {
   data() {
     return {
@@ -56,7 +60,8 @@ export default {
     TrackList,
     SearchBar,
     StackSongCount,
-    Modal
+    Modal,
+    StackTrackListItem
   },
   middleware: ["checkAuth", "auth"],
   methods: {

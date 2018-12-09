@@ -7,13 +7,8 @@
             <slot name="header">Modal</slot>
             <img src="~/assets/img/cross.png" alt="close modal" @click="$emit('close')">
           </div>
-
           <div class="modal-body">
             <slot name="body">Modal body</slot>
-          </div>
-
-          <div class="modal-footer">
-            <slot name="footer">Modal footer</slot>
           </div>
         </div>
       </div>

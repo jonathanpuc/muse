@@ -1,9 +1,8 @@
 <template>
   <div>
     <h2>Hello {{ name }}</h2>
-    <button>
-      <nuxt-link to="create">Create</nuxt-link>
-    </button>
+
+    <nuxt-link to="create">Create</nuxt-link>
   </div>
 </template>
 

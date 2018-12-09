@@ -1,10 +1,8 @@
 <template>
   <div>
-    <button>
-      <a
-        :href="`https://accounts.spotify.com/authorize?client_id=${spotifyClient}&redirect_uri=${spotifyRedirect}&callback&scope=user-read-private%20user-read-email&response_type=token`"
-      >Login</a>
-    </button>
+    <a
+      :href="`https://accounts.spotify.com/authorize?client_id=${spotifyClient}&redirect_uri=${spotifyRedirect}&callback&scope=user-read-private%20user-read-email&response_type=token`"
+    >Login</a>
   </div>
 </template>
 

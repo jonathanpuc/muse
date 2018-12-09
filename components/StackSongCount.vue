@@ -20,7 +20,8 @@ export default {
 }
 
 .count {
-  background-color: red;
+  background-color: #000;
+  font-size: 15px;
   color: #fff;
   font-weight: bold;
   height: 20px;

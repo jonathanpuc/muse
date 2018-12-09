@@ -2,9 +2,10 @@
   <section class="container">
     <div>
       <h1 class="title">muse</h1>
-      <button>
-        <nuxt-link to="login">LOGIN</nuxt-link>>
-      </button>
+
+      <nuxt-link to="login">LOGIN</nuxt-link>
+
+      >
       <h2 class="subtitle">speak your story in 5 songs</h2>
     </div>
   </section>
